@@ -44,6 +44,22 @@
     flex-direction: column;
     gap: 20px;
 }
+#fullname{
+    padding: 5px 30px;
+    margin-bottom: 30px;
+}
+#email{
+    padding: 5px 30px;
+    margin-bottom: 30px;
+}
+#password{
+    padding: 5px 30px;
+    margin-bottom: 30px;
+}
+.error{
+    font-size: 20px;
+    color: red;
+}
 .login_input_field{
     width: 100%;
 }
@@ -63,11 +79,13 @@
     padding-top: 30px;
     text-align: center;
 }
-.loginauth a{
+.loginauth a, .loginauth span{
     color: #EA6C00;
     font-weight: 700;
     text-transform: capitalize;
     padding-left: 8px;
+    text-decoration: underline;
+    cursor: pointer;
 }
 .loginimg img{
     width: 100%;
@@ -83,4 +101,21 @@
     margin-top: 20px;
     margin-left: -24px 
 
+}
+.forgot_box h2{
+    margin-bottom: 0px;
+}
+.forgot_box{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.modal_btn button{
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red;
+    color: #fff;
+    width: 30px;
+    border: none;
 }

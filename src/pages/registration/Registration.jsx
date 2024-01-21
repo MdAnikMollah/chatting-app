@@ -6,7 +6,9 @@ import AuthNavigate from '../../components/AuthNavigate'
 import React, { useState } from 'react';
 import Image from '../../utils/image';
 import RegImg from '../../assets/images/sea.jpg';
-
+import { TextField, IconButton, InputAdornment } from '@mui/material';
+import { useFormik } from 'formik';
+import { validation } from "../../validation/Formvalidation";
 
 
 const Registration = () => {
@@ -17,8 +19,24 @@ const Registration = () => {
    
     setShowPassword(!showPassword);
   };
+  const initialValues = {
+    
+    fullname: "",
+    email: "",
+    password:"",
+}
+const formik = useFormik({
+  initialValues:initialValues,
+  validationSchema : validation, 
+  onSubmit: (values,action) => {
+  console.log(values);
+  action.resetForm()
+  }
+})
+  
   return (
-    <Box>
+    <>
+  <Box>
     <Grid container spacing={0}>
       <Grid item xs={6}>
         <div className="loginbox">
@@ -26,28 +44,45 @@ const Registration = () => {
            <SectionHeading style="auth_heading" text="Get started with easily register"/>
           
            <div className='form_main'>
+           <form method="post" onSubmit={formik.handleSubmit}/>
             <div>
-              <Inputes name="email" type="email" varient="outlined" labeltext="Email Address" style="login_input_field"/>
-            </div>
-            <div>
-              <Inputes name="full name" type="text" varient="outlined" labeltext="Full Name" style="login_input_field"/>
-            </div>
-            <div className='passicon'>
-                <Inputes
-                  name="password"
-                  type={showPassword ? 'text' : 'password'}
-                  varient="outlined"
-                  labeltext="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  style="login_input_field"
-                />
-                <span onClick={handleTogglePassword} className="eye-icon">
-                  {showPassword ? '👁️' : '👁️‍🗨️'}
-                </span>
+              <Inputes name="email" type="email" varient="outlined" labeltext="Email Address" style="login_input_field" onChange={formik.handleChange} value={formik.values.email}/>
+              {formik.touched.email && formik.errors.email ? (
+              <div className='error'>{formik.errors.email}</div>
+              ) : null}
               </div>
+            <div>
+              <Inputes name="fullname" type="text" varient="outlined" labeltext="FullName" style="login_input_field" onChange={formik.handleChange} value={formik.values.fullname}/>
+              {formik.touched.fullname && formik.errors.fullname ? (
+            <div className='error'>{formik.errors.fullname}</div>
+            ) : null}
+            </div>
+            <div >
+                <TextField
+                  type={showPassword ? 'text' : 'password'}
+                  label="Password"
+                  variant="outlined"
+                  fullWidth
+                  value={formik.values.password}
+                  onChange={(e) => setPassword(e.target.value)(formik.handleChange)}
+                  
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={handleTogglePassword} edge="end">
+                        {showPassword ? '👁️' : '👁️‍🗨️'}
+                        {formik.touched.password && formik.errors.password ? (
+                          <div className='error'>{formik.errors.password}</div>
+                          ) : null}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </div>
+             
             
-            <CustomeButton styleing="loginbtn" varient="contained" text="sing up"/>
+            <CustomeButton  styleing="loginbtn" varient="contained" text="sing up"/>
            </div>
             <AuthNavigate style="loginauth" link="/" linktext="sign in" text="Already  have an account ?"/>
          </div>
@@ -60,6 +95,8 @@ const Registration = () => {
       </Grid>
     </Grid>
   </Box>
+  
+</>
   )
 }
 
