@@ -16,6 +16,7 @@ import { TextField, IconButton, InputAdornment } from '@mui/material';
 import { useFormik } from 'formik';
 import { validation } from "../../validation/Formvalidation";
 
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -106,7 +107,7 @@ const formik = useFormik({
               <form method="post" onSubmit={formik.handleSubmit}/>
               
               <div>
-                <Inputes name="email" type="email" varient="standard" labeltext="Email Address" style="login_input_field" onChange={formik.handleChange} value={formik.values.email}/>
+                <Inputes name="email" id="email" type="email" varient="standard" labeltext="Email Address" style="login_input_field" onChange={formik.handleChange} value={formik.values.email}/>
                 {formik.touched.email && formik.errors.email ? (
                 <div className='error'>{formik.errors.email}</div>
                  ) : null}
@@ -115,12 +116,13 @@ const formik = useFormik({
                 <div className='passicon'>
                   <Inputes
                     name="password"
+                    id="password"
                     type={showPassword ? 'text' : 'password'}
                     varient="standard"
                     labeltext="Password"
-                    //value={password}
-                    value={formik.values.password}
-                    onChange={(e) => setPassword(e.target.value) (formik.handleChange)}
+                    value={password}
+                    //value={formik.values.password}
+                    onChange={(e) => setPassword(e.target.value)}
                     style="login_input_field"
                   />
                   <span onClick={handleTogglePassword} className="eye-icon">

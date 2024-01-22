@@ -1,5 +1,65 @@
-.sidebar{
-    width: 100%;
-    background-color: brown;
+.sidebar_box{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #5F35F5;
+    align-items: center;
+    padding: 50px 0;
     height: 100vh;
+   
+}
+.img_box{
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    
+}
+.logout{
+    padding: 15px 30px;
+    background-color: #fff;
+    color: #5F35F5;
+    font-size: 18px;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 25px;
+    
+}
+.navigation{
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+.navigation li a{
+    color: #fff;
+    padding: 12px 55px;
+    display: inline-block;
+    border-radius: 20px;
+    gap: 20px;
+}
+.navigation li a svg{
+    font-size: 25px;
+}
+.navigation li a.active{
+    background-color: #fff;
+    color: #5F35F5;
+    margin-top: 25px;
+}
+.username{
+    color: #fff;
+    text-align: center;
+    font-size: 20px;
+    padding-bottom: 20px;
+}
+.groupcard{
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    width: 427px;
+}
+.outletbox{
+    padding: 30px;
 }

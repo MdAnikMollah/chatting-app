@@ -44,18 +44,8 @@
     flex-direction: column;
     gap: 20px;
 }
-#fullname{
-    padding: 5px 30px;
-    margin-bottom: 30px;
-}
-#email{
-    padding: 5px 30px;
-    margin-bottom: 30px;
-}
-#password{
-    padding: 5px 30px;
-    margin-bottom: 30px;
-}
+
+
 .error{
     font-size: 20px;
     color: red;

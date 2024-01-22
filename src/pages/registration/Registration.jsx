@@ -46,13 +46,13 @@ const formik = useFormik({
            <div className='form_main'>
            <form method="post" onSubmit={formik.handleSubmit}/>
             <div>
-              <Inputes name="email" type="email" varient="outlined" labeltext="Email Address" style="login_input_field" onChange={formik.handleChange} value={formik.values.email}/>
+              <Inputes name="email" id="email" type="email" varient="outlined" labeltext="Email Address" style="login_input_field" onChange={formik.handleChange} value={formik.values.email}/>
               {formik.touched.email && formik.errors.email ? (
               <div className='error'>{formik.errors.email}</div>
               ) : null}
               </div>
             <div>
-              <Inputes name="fullname" type="text" varient="outlined" labeltext="FullName" style="login_input_field" onChange={formik.handleChange} value={formik.values.fullname}/>
+              <Inputes name="fullname" id="fullname" type="text" varient="outlined" labeltext="FullName" style="login_input_field" onChange={formik.handleChange} value={formik.values.fullname}/>
               {formik.touched.fullname && formik.errors.fullname ? (
             <div className='error'>{formik.errors.fullname}</div>
             ) : null}
@@ -63,8 +63,8 @@ const formik = useFormik({
                   label="Password"
                   variant="outlined"
                   fullWidth
-                  value={formik.values.password}
-                  onChange={(e) => setPassword(e.target.value)(formik.handleChange)}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   
                   InputProps={{
                     endAdornment: (
