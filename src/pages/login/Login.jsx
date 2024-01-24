@@ -6,15 +6,15 @@ import Grid from '@mui/material/Grid';
 import "./login.css";
 import SectionHeading from '../../components/SectionHeading';
 import GoogleSvg from '../../../public/google.svg';
-import { Input, Modal, Typography } from '@mui/material';
+import { Alert, Input, Modal, Typography } from '@mui/material';
 import Inputes from '../../components/Inputes';
 import CustomeButton from '../../components/CustomeButton';
 import AuthNavigate from '../../components/AuthNavigate';
 import LoginImg from '../../assets/images/hill.jpg';
 import Image from '../../utils/image';
 import { TextField, IconButton, InputAdornment } from '@mui/material';
-import { useFormik } from 'formik';
-import { validation } from "../../validation/Formvalidation";
+
+
 
 
 const style = {
@@ -45,33 +45,80 @@ const ValidationTextField = styled(TextField)({
 });
 
 const Login = () => {
-  const [password, setPassword] = useState('');
+  //let emailregex = (/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+  //const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  //const handleshowPassword = () =>{}
 
-  const handleTogglePassword = () => {
-    setShowPassword(!showPassword);
-  };
+
+  //const handleTogglePassword = () => {
+    //setShowPassword(!showPassword);
+  //};
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  
   let handleModalX = () => {
     setOpen(false)
   }
-  const initialValues = {
-    
-    fullname: "",
-    email: "",
-    password:"",
-}
-const formik = useFormik({
-  initialValues:initialValues,
-  validationSchema : validation, 
-  onSubmit: (values,action) => {
-  console.log(values);
-  action.resetForm()
+  let emailregex = (/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+  let [formData, setFormData] = useState({
+     email: "", 
+     password:"" 
+    })
+  let [error, setError] = useState({
+     email: "", 
+     password:"" 
+  })
+  let handleLoginForm = (e) =>{
+    let {name, value} = e.target
+    setFormData({
+      ...formData,[name]:value
+    })
   }
-})
+  let handleLoginSubmit = () => {
+    if(!formData.email){
+      setError({email:"email nai"});
+    }
+    else if(!formData.email.match(emailregex)){
+      setError({email:"email format thik nai"});
+    }else if(!formData.password){
+      setError({email:""});
+      setError({password:"password nai"});
+    }else{
+      setError({
+        email:"",
+        password:""
+      })
+      console.log(formData);
+    }
+  }
+  let [forgetformData, setforgetFormData] = useState({
+    forgetemail: "",
+  })
+  let [forgeterror, setforgetError] = useState({
+    forgetemail: "",
+  })
+
+  let handleForgetData = (e) => {
+    let {name, value} = e.target
+    setforgetFormData({
+      ...forgetformData,[name]:value
+    })
+  }
+  
+  let handleForgetSubmit = () => {
+    console.log(forgetformData);
+    if(!forgetformData.forgetemail){
+      setforgetError({forgetemail: "forget email ny"});
+    }
+    else if(!forgetformData.forgetemail.match(emailregex)){
+      setforgetError({forgetemail: "email format thik ny"});
+    }else{
+      setforgetError({forgetemail: ""})
+      console.log(forgetformData);
+    }
+  }
 
   return (
     <>
@@ -87,8 +134,14 @@ const formik = useFormik({
         </div>
         <div className='forgot_box'>
           <h2>Forgot Password</h2>
-          <Inputes type= "email" labeltext={'Email Address'} varient="standard"></Inputes>
-          <CustomeButton text="Send Link" varient={"contained"}/>
+          <div>
+
+          <Inputes type= "email" name="forgetemail" onChange={handleForgetData} labeltext={'Email Address'} varient="standard"/>
+          {forgeterror.forgetemail &&
+            <Alert severity="error">{forgeterror.forgetemail}</Alert>
+          }
+          </div>
+          <CustomeButton onClick={handleForgetSubmit} text="Send Link" varient={"contained"}/>
         </div>
         </Box>
       
@@ -104,36 +157,39 @@ const formik = useFormik({
                 <span>Login with Google</span>
              </div>
              <div className='form_main'>
-              <form method="post" onSubmit={formik.handleSubmit}/>
+             
               
               <div>
-                <Inputes name="email" id="email" type="email" varient="standard" labeltext="Email Address" style="login_input_field" onChange={formik.handleChange} value={formik.values.email}/>
-                {formik.touched.email && formik.errors.email ? (
-                <div className='error'>{formik.errors.email}</div>
-                 ) : null}
+                <Inputes onChange={handleLoginForm}  name="email"  type="email" varient="standard" labeltext="Email Address" style="login_input_field" />
+                {error.email &&
+                  <Alert severity="error">{error.email}</Alert>
+                }
+              </div>
+              <div>
+                <Inputes onChange={handleLoginForm} name="password"  type={showPassword ? 'text' : 'password'} varient="standard" labeltext="Password" style="login_input_field" />
+                <button onClick={()=>setShowPassword(!showPassword)}>Show</button>
+                {error.password &&
+                  <Alert severity="error">{error.password}</Alert>
+                } 
               </div>
               <div >
-                <div className='passicon'>
+                {/*<div className='passicon'>
                   <Inputes
                     name="password"
-                    id="password"
                     type={showPassword ? 'text' : 'password'}
                     varient="standard"
                     labeltext="Password"
                     value={password}
-                    //value={formik.values.password}
                     onChange={(e) => setPassword(e.target.value)}
                     style="login_input_field"
                   />
                   <span onClick={handleTogglePassword} className="eye-icon">
                     {showPassword ? '👁️' : '👁️‍🗨️'}
-                    {formik.touched.password && formik.errors.password ? (
-                    <div className='error'>{formik.errors.password}</div>
-                    ) : null}
+                    
                   </span>
-                </div>
+                  </div>*/}
               </div>
-              <CustomeButton styleing="loginbtn" varient="contained" text="login to continue"/>
+              <CustomeButton  onClick={handleLoginSubmit}   styleing="loginbtn" varient="contained" text="login to continue"/>
              </div>
               <AuthNavigate style="loginauth" link="/registration" linktext="sign up" text="Don’t have an account ?"/>
               {/*<AuthNavigate style="loginauth" linktext="Forget Password"  text="Are you sure reset your password ?"/>*/}
