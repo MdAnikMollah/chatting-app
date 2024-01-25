@@ -8,12 +8,92 @@ ul,ol{
     list-style-type: none;
 }
 .groupcard{
+    width: 334px;
     background-color: #fff;
     border-radius: 20px;
     padding: 25px;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    width: 427px;
+    
 }
 .outletbox{
     padding: 30px;
+}
+.group_heading{
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+}
+.group_heading h4{
+    color: #000;
+    font-size: 20px;
+}
+.group_heading .dots{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #e0dddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.usermainbox{
+    margin-top: 17px;
+    flex-direction: column;
+    display: flex;
+    overflow-y: scroll;
+    height: 400px;
+}
+.usermainbox::-webkit-scrollbar{
+    width: 0;
+}
+.usermainbox::-webkit-scrollbar-thumb{
+    background: blue;
+    border-radius: 8px;
+}
+.useritem{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    padding-bottom: 13px;
+    display:flex;
+    align-items: center;
+    gap: 14px;
+}
+.useritem:last-child{
+    border-bottom: 0;
+}
+.userinfobox{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-basis: 75%;
+}
+.addbutton{
+    padding: 10px;
+    border: 0;
+    background-color: blueviolet;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.usermainbox{
+    gap: 14px;
+}
+.userimgbox{
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: green;
+    overflow: hidden;
+    background-color: #d6caca;
+}
+.userimgbox img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.home_wrapper{
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
 }

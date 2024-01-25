@@ -1,12 +1,17 @@
 import React from 'react'
-import GroupCard from '../../components/home/GroupCard'
+
+import UserList from './UserList';
+import Friends from './Friends';
+import FriendRequest from './FriendRequest';
+import BlockList from './BlockList';
 
 const Home = () => {
   return (
-    <div>
-      <GroupCard>
-        
-      </GroupCard> 
+    <div className='home_wrapper'>
+      <UserList/>
+      <Friends/>
+      <FriendRequest/>
+      <BlockList/> 
     </div>
   )
 }

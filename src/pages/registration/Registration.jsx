@@ -7,27 +7,28 @@ import React, { useState } from 'react';
 import Image from '../../utils/image';
 import RegImg from '../../assets/images/sea.jpg';
 import { TextField, IconButton, InputAdornment } from '@mui/material';
-
+import { IoMdEye } from "react-icons/io";
+import { IoMdEyeOff } from "react-icons/io";
 
 
 
 const Registration = () => {
-  {/*const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const handleTogglePassword = () => {
    
     setShowPassword(!showPassword);
-  };*/}
+  };
  let [error,setError]= useState({
-  email:"",
-  fullname:"",
-  password:""
+    email:"",
+    fullname:"",
+    password:""
  })
  let [singupData,setSingupData] = useState({
-  email:"",
-  fullname:"",
-  password:""
+    email:"",
+    fullname:"",
+    password:""
  }) 
  let handleSubmit =() =>{
   if (!singupData.email) {
@@ -48,7 +49,7 @@ const Registration = () => {
   else if(!singupData.fullname){
     setError({email:""});
     setError({fullname:"name nai"});
-  }else if(!singupData.password){
+  }else if(!password){
     setError({fullname:""});
     setError({password:"password nai"});
   }else{
@@ -60,13 +61,13 @@ const Registration = () => {
     console.log(singupData);
   }
 
- }
+ };
  let handleForm =(e) => {
   let {name,value} = e.target
   setSingupData({
     ...singupData,[name]:value
-  })
- }
+  });
+ };
  let emailregex = (/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
   
   return (
@@ -82,24 +83,24 @@ const Registration = () => {
           
             <div>
               <Inputes onChange={handleForm} name="email"  type="email" varient="outlined" labeltext="Email Address" style="login_input_field"/>
-              {error.email &&
+              {error.email &&(
               <Alert severity="error">{error.email}</Alert>
-              }
+              )}
               </div>
             <div>
               <Inputes onChange={handleForm} name="fullname"  type="text" varient="outlined" labeltext="FullName" style="login_input_field"/>
-              {error.fullname &&
+              {error.fullname &&(
               <Alert severity="error">{error.fullname}</Alert>
-              }
+              )}
             </div>
-            <div>
+            {/*<div>
               <Inputes onChange={handleForm} name="password"  type="password" varient="outlined" labeltext="Password" style="login_input_field"/>
               {error.password &&
               <Alert severity="error">{error.password}</Alert>
               }
-            </div>
-            <div >
-               {/* <TextField
+            </div>*/}
+             <div>
+                <TextField
                   type={showPassword ? 'text' : 'password'}
                   label="Password"
                   variant="outlined"
@@ -111,13 +112,16 @@ const Registration = () => {
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton onClick={handleTogglePassword} edge="end">
-                        {showPassword ? '👁️' : '👁️‍🗨️'}
+                        {showPassword ? <IoMdEye /> : <IoMdEyeOff />}
                         
                         </IconButton>
                       </InputAdornment>
                     ),
                   }}
-                />*/}
+                />
+                {error.password &&(
+                 <Alert severity="error">{error.password}</Alert>
+                )}
               </div>
              
             

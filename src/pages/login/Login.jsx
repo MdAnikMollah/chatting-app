@@ -13,8 +13,8 @@ import AuthNavigate from '../../components/AuthNavigate';
 import LoginImg from '../../assets/images/hill.jpg';
 import Image from '../../utils/image';
 import { TextField, IconButton, InputAdornment } from '@mui/material';
-
-
+import { IoMdEye } from "react-icons/io";
+import { IoMdEyeOff } from "react-icons/io";
 
 
 const style = {
@@ -46,14 +46,14 @@ const ValidationTextField = styled(TextField)({
 
 const Login = () => {
   //let emailregex = (/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-  //const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  //const handleshowPassword = () =>{}
+  const handleshowPassword = () =>{};
+  console.log(password);
 
-
-  //const handleTogglePassword = () => {
-    //setShowPassword(!showPassword);
-  //};
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -82,7 +82,7 @@ const Login = () => {
     }
     else if(!formData.email.match(emailregex)){
       setError({email:"email format thik nai"});
-    }else if(!formData.password){
+    }else if(!password){
       setError({email:""});
       setError({password:"password nai"});
     }else{
@@ -95,10 +95,10 @@ const Login = () => {
   }
   let [forgetformData, setforgetFormData] = useState({
     forgetemail: "",
-  })
+  });
   let [forgeterror, setforgetError] = useState({
     forgetemail: "",
-  })
+  });
 
   let handleForgetData = (e) => {
     let {name, value} = e.target
@@ -110,10 +110,10 @@ const Login = () => {
   let handleForgetSubmit = () => {
     console.log(forgetformData);
     if(!forgetformData.forgetemail){
-      setforgetError({forgetemail: "forget email ny"});
+      setforgetError({forgetemail: "email nai"});
     }
     else if(!forgetformData.forgetemail.match(emailregex)){
-      setforgetError({forgetemail: "email format thik ny"});
+      setforgetError({forgetemail: "email format thik nai"});
     }else{
       setforgetError({forgetemail: ""})
       console.log(forgetformData);
@@ -137,9 +137,9 @@ const Login = () => {
           <div>
 
           <Inputes type= "email" name="forgetemail" onChange={handleForgetData} labeltext={'Email Address'} varient="standard"/>
-          {forgeterror.forgetemail &&
+          {forgeterror.forgetemail &&(
             <Alert severity="error">{forgeterror.forgetemail}</Alert>
-          }
+          )}
           </div>
           <CustomeButton onClick={handleForgetSubmit} text="Send Link" varient={"contained"}/>
         </div>
@@ -161,19 +161,19 @@ const Login = () => {
               
               <div>
                 <Inputes onChange={handleLoginForm}  name="email"  type="email" varient="standard" labeltext="Email Address" style="login_input_field" />
-                {error.email &&
+                {error.email &&(
                   <Alert severity="error">{error.email}</Alert>
-                }
+                )}
               </div>
-              <div>
+              {/*<div>
                 <Inputes onChange={handleLoginForm} name="password"  type={showPassword ? 'text' : 'password'} varient="standard" labeltext="Password" style="login_input_field" />
                 <button onClick={()=>setShowPassword(!showPassword)}>Show</button>
                 {error.password &&
                   <Alert severity="error">{error.password}</Alert>
                 } 
-              </div>
-              <div >
-                {/*<div className='passicon'>
+              </div>*/}
+              {/*<div >
+                <div className='passicon'>
                   <Inputes
                     name="password"
                     type={showPassword ? 'text' : 'password'}
@@ -184,11 +184,37 @@ const Login = () => {
                     style="login_input_field"
                   />
                   <span onClick={handleTogglePassword} className="eye-icon">
-                    {showPassword ? '👁️' : '👁️‍🗨️'}
-                    
-                  </span>
-                  </div>*/}
-              </div>
+                    {showPassword ? <IoMdEye /> : <IoMdEyeOff />}
+                    </span>
+                    {error.password &&(
+                      <Alert severity="error">{error.password}</Alert>
+                    )}
+                  </div>
+                    </div>*/}
+                  <div>
+                      <TextField
+                        type={showPassword ? 'text' : 'password'}
+                        label="Password"
+                        variant="standard"
+                        fullWidth
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton onClick={handleTogglePassword} edge="end">
+                              {showPassword ? <IoMdEye /> : <IoMdEyeOff />}
+                              
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                      {error.password &&(
+                      <Alert severity="error">{error.password}</Alert>
+                    )}
+                  </div>
               <CustomeButton  onClick={handleLoginSubmit}   styleing="loginbtn" varient="contained" text="login to continue"/>
              </div>
               <AuthNavigate style="loginauth" link="/registration" linktext="sign up" text="Don’t have an account ?"/>
