@@ -9,10 +9,12 @@ import RegImg from '../../assets/images/sea.jpg';
 import { TextField, IconButton, InputAdornment } from '@mui/material';
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 
 
 
 const Registration = () => {
+  const auth = getAuth();
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
@@ -58,7 +60,24 @@ const Registration = () => {
       fullname:"",
       password:""
     })
-    console.log(singupData);
+    createUserWithEmailAndPassword(auth, singupData.email, password).then((userCredential)=>{
+      console.log(userCredential);
+      setSingupData({
+        email:"",
+        fullname:"",
+        password:""
+      })
+    }).catch((error)=>{
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      if(errorCode == "auth/email-already-in-use"){
+        setError({email:"email already exist"});
+      }else{
+        setError({email:""});
+      }
+      
+    })
+    //console.log(singupData);
   }
 
  };
@@ -82,13 +101,13 @@ const Registration = () => {
            <div className='form_main'>
           
             <div>
-              <Inputes onChange={handleForm} name="email"  type="email" varient="outlined" labeltext="Email Address" style="login_input_field"/>
+              <Inputes onChange={handleForm} name="email" value={singupData.email}  type="email" varient="outlined" labeltext="Email Address" style="login_input_field"/>
               {error.email &&(
               <Alert severity="error">{error.email}</Alert>
               )}
               </div>
             <div>
-              <Inputes onChange={handleForm} name="fullname"  type="text" varient="outlined" labeltext="FullName" style="login_input_field"/>
+              <Inputes onChange={handleForm} name="fullname" value={singupData.fullname}  type="text" varient="outlined" labeltext="FullName" style="login_input_field"/>
               {error.fullname &&(
               <Alert severity="error">{error.fullname}</Alert>
               )}
