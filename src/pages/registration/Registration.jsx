@@ -51,7 +51,7 @@ const Registration = () => {
   else if(!singupData.fullname){
     setError({email:""});
     setError({fullname:"name nai"});
-  }else if(!password){
+  }else if(!singupData.password){
     setError({fullname:""});
     setError({password:"password nai"});
   }else{
@@ -60,7 +60,7 @@ const Registration = () => {
       fullname:"",
       password:""
     })
-    createUserWithEmailAndPassword(auth, singupData.email, password).then((userCredential)=>{
+    createUserWithEmailAndPassword(auth, singupData.email,singupData.password).then((userCredential)=>{
       console.log(userCredential);
       setSingupData({
         email:"",
@@ -121,11 +121,12 @@ const Registration = () => {
              <div>
                 <TextField
                   type={showPassword ? 'text' : 'password'}
+                  name='password'
                   label="Password"
                   variant="outlined"
                   fullWidth
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={singupData.password}
+                  onChange={handleForm}
                   
                   InputProps={{
                     endAdornment: (
