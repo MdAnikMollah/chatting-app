@@ -10,11 +10,14 @@ import { TextField, IconButton, InputAdornment } from '@mui/material';
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-
+import { ColorRing } from 'react-loader-spinner'
+import { useNavigate } from "react-router-dom";
 
 
 const Registration = () => {
   const auth = getAuth();
+  const navigate = useNavigate();
+  const [loader, setLoader] = useState(false)
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
@@ -55,18 +58,15 @@ const Registration = () => {
     setError({fullname:""});
     setError({password:"password nai"});
   }else{
+    setLoader(true)
     setError({
       email:"",
       fullname:"",
       password:""
     })
     createUserWithEmailAndPassword(auth, singupData.email,singupData.password).then((userCredential)=>{
-      console.log(userCredential);
-      setSingupData({
-        email:"",
-        fullname:"",
-        password:""
-      })
+      console.log(userCredential.user.emailVerified);
+      navigate("/")
     }).catch((error)=>{
       const errorCode = error.code;
       const errorMessage = error.message;
@@ -77,6 +77,15 @@ const Registration = () => {
       }
       
     })
+    setSingupData({
+      email:"",
+      fullname:"",
+      password:""
+    })
+    setTimeout(()=>{
+      
+      setLoader(false)
+    },2000)
     //console.log(singupData);
   }
 
@@ -143,9 +152,21 @@ const Registration = () => {
                  <Alert severity="error">{error.password}</Alert>
                 )}
               </div>
-             
+                  {loader ?
+                    <ColorRing
+                    visible={true}
+                    height="80"
+                    width="80"
+                    ariaLabel="color-ring-loading"
+                    wrapperStyle={{}}
+                    wrapperClass="color-ring-wrapper"
+                    colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                  />
+                  :
+                  <CustomeButton onClick={handleSubmit}  styleing="loginbtn" varient="contained" text="sing up"/>
+                  }
             
-            <CustomeButton onClick={handleSubmit}  styleing="loginbtn" varient="contained" text="sing up"/>
+              
            </div>
             <AuthNavigate style="loginauth" link="/" linktext="sign in" text="Already  have an account ?"/>
          </div>

@@ -15,7 +15,7 @@ import Image from '../../utils/image';
 import { TextField, IconButton, InputAdornment } from '@mui/material';
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
-
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const style = {
   position: 'absolute',
@@ -45,11 +45,12 @@ const ValidationTextField = styled(TextField)({
 });
 
 const Login = () => {
+  const auth = getAuth();
   //let emailregex = (/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const handleshowPassword = () =>{};
-  console.log(password);
+  //console.log(password);
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -74,18 +75,31 @@ const Login = () => {
     let {name, value} = e.target
     setFormData({
       ...formData,[name]:value
-    })
-  }
+    });
+  };
   let handleLoginSubmit = () => {
     if(!formData.email){
       setError({email:"email nai"});
     }
     else if(!formData.email.match(emailregex)){
       setError({email:"email format thik nai"});
-    }else if(!password){
+    }else if(!formData.password){
       setError({email:""});
       setError({password:"password nai"});
     }else{
+      signInWithEmailAndPassword(auth,formData.email,formData.password).then((userCredential)=>{
+        console.log(userCredential);
+      }).catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        if(error == "auth/invalid-credential"){
+          setError({email:"email or passowrd error"});
+        }else{
+          setError({email:""});
+        }
+        console.log(errorCode);
+        console.log(errorMessage);
+      })
       setError({
         email:"",
         password:""
@@ -194,12 +208,13 @@ const Login = () => {
                   <div>
                       <TextField
                         type={showPassword ? 'text' : 'password'}
+                        name='password'
                         label="Password"
                         variant="standard"
                         fullWidth
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        
+                        value={formData.password}
+                        //onChange={(e) => setPassword(e.target.value)}
+                        onChange={handleLoginForm}
                         InputProps={{
                           endAdornment: (
                             <InputAdornment position="end">
