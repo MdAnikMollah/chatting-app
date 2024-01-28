@@ -9,12 +9,14 @@ import RegImg from '../../assets/images/sea.jpg';
 import { TextField, IconButton, InputAdornment } from '@mui/material';
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, updateProfile  } from "firebase/auth";
 import { ColorRing } from 'react-loader-spinner'
 import { useNavigate } from "react-router-dom";
+import { getDatabase, ref, set } from "firebase/database";
 
 
 const Registration = () => {
+  const db = getDatabase();
   const auth = getAuth();
   const navigate = useNavigate();
   const [loader, setLoader] = useState(false)
@@ -65,8 +67,22 @@ const Registration = () => {
       password:""
     })
     createUserWithEmailAndPassword(auth, singupData.email,singupData.password).then((userCredential)=>{
-      console.log(userCredential.user.emailVerified);
-      navigate("/")
+      sendEmailVerification(auth.currentUser).then(()=>{
+        updateProfile(auth.currentUser,{
+          displayName:singupData.fullname,
+          photoURL:"https://cdn-icons-png.flaticon.com/512/6596/6596121.png"
+        }).then(()=>{
+          set(ref(db, 'users/' + userCredential.user.uid), {
+            username:userCredential.user.displayName,
+            email:userCredential.user.email,
+            profileImg : userCredential.user.photoURL
+          }).then(()=>{
+            navigate("/")
+            console.log(userCredential);
+
+          })
+        })
+      })
     }).catch((error)=>{
       const errorCode = error.code;
       const errorMessage = error.message;

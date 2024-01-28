@@ -15,8 +15,9 @@ import Image from '../../utils/image';
 import { TextField, IconButton, InputAdornment } from '@mui/material';
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-
+import { getAuth, signInWithEmailAndPassword, signOut  } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -46,6 +47,7 @@ const ValidationTextField = styled(TextField)({
 
 const Login = () => {
   const auth = getAuth();
+  const navigate = useNavigate();
   //let emailregex = (/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -88,14 +90,34 @@ const Login = () => {
       setError({password:"password nai"});
     }else{
       signInWithEmailAndPassword(auth,formData.email,formData.password).then((userCredential)=>{
-        console.log(userCredential);
+        //console.log(userCredential);
+        if(userCredential.user.emailVerified){
+          navigate("/home")
+          console.log(userCredential.user);
+        }else{
+          signOut(auth).then(()=>{
+            toast.error('Please verify your email', {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+              });
+            console.log("Please verify your email");
+            console.log("logout done");
+
+          })
+        }
       }).catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        if(error == "auth/invalid-credential"){
-          setError({email:"email or passowrd error"});
+        if(errorCode == "auth/invalid-credential"){
+          setError({email: "email or password error"});
         }else{
-          setError({email:""});
+          setError({email: ""});
         }
         console.log(errorCode);
         console.log(errorMessage);
@@ -104,7 +126,7 @@ const Login = () => {
         email:"",
         password:""
       })
-      console.log(formData);
+      //console.log(formData);
     }
   }
   let [forgetformData, setforgetFormData] = useState({
@@ -136,6 +158,18 @@ const Login = () => {
 
   return (
     <>
+     <ToastContainer
+      position="top-right"
+      autoClose={5000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="dark"
+    />
     <Modal
       open={open}
       onClose={handleClose}
