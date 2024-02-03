@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { MdOutlineHome } from "react-icons/md";
 import { Link, NavLink } from 'react-router-dom';
 import { AiOutlineMessage } from "react-icons/ai";
@@ -9,10 +9,24 @@ import { getAuth, signInWithEmailAndPassword, signOut  } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 //import { getAuth } from "firebase/auth";
+import { useSelector, useDispatch } from 'react-redux'
+import { loginuser } from '../../slices/userSlice';
 
 const Sidebar = () => {
+    const data = useSelector((state) => state.loginuserdata.value)
     const navigate = useNavigate();
     const auth = getAuth();
+    const dispatch = useDispatch()
+    
+    useEffect(()=>{
+        if(!data){
+            navigate("/")
+        }
+        else{
+            navigate("/home")
+        }
+    },[])
+    
     let handleLogout = () =>{
     signOut(auth).then(()=>{
         setTimeout(()=>{
@@ -28,11 +42,14 @@ const Sidebar = () => {
                 theme: "light",
             });
             },1000);
+            localStorage.removeItem("user")
+            dispatch(loginuser(null))
             navigate("/")
     })    
     }
     const userinfo = auth.currentUser;
-    console.log(userinfo.displayName);
+    //console.log(userinfo.displayName);
+    
   return (
    <>
    <ToastContainer
@@ -50,9 +67,12 @@ const Sidebar = () => {
    <div className="sidebar_box">
     <div>
         <div className="img_box">
-            <Image src={userinfo && userinfo.photoURL} alt="img"/>
+            <Image src={data && data.photoURL} alt="img"/>
         </div>
-        <h3 className='username'>{userinfo && userinfo.displayName}</h3>
+        <h3 className='username'>{data && data.displayName}</h3>
+        <div className='emaildata'>
+            <p>{data && data.email}</p>
+        </div>
     </div>
     <div>
         <ul className='navigation'>
