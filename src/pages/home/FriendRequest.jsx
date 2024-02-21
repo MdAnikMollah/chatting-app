@@ -4,6 +4,7 @@ import Image from '../../utils/Image';
 import { getDatabase, ref, onValue, set, push, remove } from "firebase/database";
 import { useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
+
 const FriendRequest = () => {
   const db = getDatabase();
   const data = useSelector((state) => state.loginuserdata.value)
@@ -25,7 +26,32 @@ const FriendRequest = () => {
   
   
   },[])
+let handleacceptFrequest = (acceptinfo)=>{
+  console.log(acceptinfo);
+  set(push(ref(db,"friends")),{
+   whosendname: acceptinfo.sendername,
+   whosendid: acceptinfo.senderid,
+   whosendemail: acceptinfo.senderemail,
+   whosendphoto: acceptinfo.senderimg,
+   whorecievename: data.displayName,
+   whorecieveid: data.uid,
+   whorecieveemail: data.email,
+   whorecievephoto: data.photoURL
 
+  }).then(()=>{
+    remove(ref(db,"friendrequest/" + acceptinfo.id))
+    toast.success('Friend request accepted successfully.....', {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      });
+  })
+}
 let handlecancleFrequest = (cancleinfo)=>{
   console.log(cancleinfo);
   remove(ref(db,"friendrequest/" + cancleinfo.id)).then(()=>{
@@ -72,7 +98,7 @@ let handlecancleFrequest = (cancleinfo)=>{
               </div>
               <div>
                 <div className="buttongroup">
-                  <button className='addbutton'>
+                  <button  onClick={()=>handleacceptFrequest(item)} className='addbutton'>
                     Accept
                   </button>
                   <button onClick={()=>handlecancleFrequest(item)} className='addbutton'>

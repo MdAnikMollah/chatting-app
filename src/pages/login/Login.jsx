@@ -11,7 +11,7 @@ import Inputes from '../../components/Inputes';
 import CustomeButton from '../../components/CustomeButton';
 import AuthNavigate from '../../components/AuthNavigate';
 import LoginImg from '../../assets/images/hill.jpg';
-import Image from '../../utils/image';
+import Image from '../../utils/Image';
 import { TextField, IconButton, InputAdornment } from '@mui/material';
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";

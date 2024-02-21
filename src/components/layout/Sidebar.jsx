@@ -4,19 +4,39 @@ import { Link, NavLink } from 'react-router-dom';
 import { AiOutlineMessage } from "react-icons/ai";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
-import Image from '../../utils/image';
+import Image from '../../utils/Image';
 import { getAuth, signInWithEmailAndPassword, signOut  } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 //import { getAuth } from "firebase/auth";
 import { useSelector, useDispatch } from 'react-redux'
 import { loginuser } from '../../slices/userSlice';
+import { Alert, Input, Modal, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import { IoMdCloudUpload } from "react-icons/io";
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 
 const Sidebar = () => {
     const data = useSelector((state) => state.loginuserdata.value)
     const navigate = useNavigate();
     const auth = getAuth();
     const dispatch = useDispatch()
+
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
     
     useEffect(()=>{
         if(!data){
@@ -52,6 +72,22 @@ const Sidebar = () => {
     
   return (
    <>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <h2>Upload Profile Photo</h2>
+          <div className="img_holder">
+
+          <Image src={data && data.photoURL} alt="img"/>
+          </div>
+          <input type="file"/>
+        </Box>
+      </Modal>
+
    <ToastContainer
     position="top-right"
     autoClose={5000}
@@ -68,6 +104,9 @@ const Sidebar = () => {
     <div>
         <div className="img_box">
             <Image src={data && data.photoURL} alt="img"/>
+            <div onClick={handleOpen} className='overlay'>
+            <IoMdCloudUpload />
+            </div>
         </div>
         <h3 className='username'>{data && data.displayName}</h3>
         <div className='emaildata'>
