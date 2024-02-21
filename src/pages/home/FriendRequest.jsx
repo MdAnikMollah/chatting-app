@@ -1,26 +1,94 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import GroupCard from '../../components/home/GroupCard'
-import Image from '../../utils/Image'
-
+import Image from '../../utils/Image';
+import { getDatabase, ref, onValue, set, push, remove } from "firebase/database";
+import { useSelector } from 'react-redux';
+import { ToastContainer, toast } from 'react-toastify';
 const FriendRequest = () => {
+  const db = getDatabase();
+  const data = useSelector((state) => state.loginuserdata.value)
+  const [fRequest,setfRequst] = useState()
+
+  useEffect(()=>{
+    const fRequestRef = ref(db, 'friendrequest');
+    onValue(fRequestRef, (snapshot) => {
+    let arr = []
+    snapshot.forEach((item)=>{
+      console.log(item.val());
+      if(data.uid == item.val().receiverid){
+         arr.push({...item.val(),id:item.key});
+  
+       }
+   })
+   setfRequst(arr)
+  });
+  
+  
+  },[])
+
+let handlecancleFrequest = (cancleinfo)=>{
+  console.log(cancleinfo);
+  remove(ref(db,"friendrequest/" + cancleinfo.id)).then(()=>{
+    toast.error('cancle done....', {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      
+      });
+  })
+}
   return (
     <>
+    <ToastContainer
+      position="top-right"
+      autoClose={2000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="light"
+
+    />
     <GroupCard cardtitle="Friend Request"> 
         <div className='usermainbox'>
-          <div className='useritem'>
+          {fRequest && fRequest.length > 0 ?
+          fRequest.map((item,index)=>(
+          <div key={index} className='useritem'>
             <div className="userimgbox">
-              <Image src="" alt="img"/>
+              <Image src={item.senderimg} alt="img"/>
             </div>
             <div className='userinfobox'>
               <div>
-                <h3>Anik</h3>
+                <h3>{item.sendername}</h3>
                 <p>MERN developer</p>
               </div>
-              <button className='addbutton'>
-                Accept
-              </button>
+              <div>
+                <div className="buttongroup">
+                  <button className='addbutton'>
+                    Accept
+                  </button>
+                  <button onClick={()=>handlecancleFrequest(item)} className='addbutton'>
+                    Cancle
+                  </button>
+
+                </div>
+
+              </div>
             </div>
           </div>
+
+          ))
+          :
+          <h2>No Request Found....</h2>
+          }
         </div>
   </GroupCard> 
     </>

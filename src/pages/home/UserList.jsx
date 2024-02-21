@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import GroupCard from '../../components/home/GroupCard'
 import { FaPlus } from 'react-icons/fa'
-import Image from '../../utils/image';
+import Image from '../../utils/Image';
 import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { useSelector, useDispatch } from 'react-redux'
+import { ToastContainer, toast } from 'react-toastify';
 const UserList = () => {
   const [userList,setUserList] = useState()
   const db = getDatabase();
@@ -24,7 +25,6 @@ useEffect(()=>{
 
 },[])
 let handleFRequest = (frequestinfo) => {
-console.log(frequestinfo);
 set(push(ref(db,"friendrequest")),{
   senderid: data.uid,
   sendername: data.displayName,
@@ -34,11 +34,36 @@ set(push(ref(db,"friendrequest")),{
   receivername: frequestinfo.username,
   receiveremail: frequestinfo.email,
   receiverimg: frequestinfo.profileImg
+}).then(()=>{
+  toast.success('Friend request send successfully.....', {
+    position: "top-right",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    });
 })
 }
 
   return (
    <>
+   <ToastContainer
+      position="top-right"
+      autoClose={2000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="light"
+  />
+
+  <ToastContainer />
    <GroupCard cardtitle="User List"> 
         <div className='usermainbox'>
         {userList && userList.length > 0

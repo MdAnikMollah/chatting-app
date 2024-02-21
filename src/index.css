@@ -8,7 +8,7 @@ ul,ol{
     list-style-type: none;
 }
 .groupcard{
-    width: 334px;
+    width: 400px;
     background-color: #fff;
     border-radius: 20px;
     padding: 25px;
@@ -67,14 +67,21 @@ ul,ol{
     justify-content: space-between;
     flex-basis: 75%;
 }
+.buttongroup{
+    display: flex;
+    gap: 5px;
+}
 .addbutton{
+    
     padding: 10px;
     border: 0;
     background-color: blueviolet;
     color: #fff;
     border-radius: 5px;
     cursor: pointer;
+    
 }
+
 .usermainbox{
     gap: 14px;
 }
