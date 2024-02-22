@@ -5,25 +5,29 @@ import Image from '../../utils/Image';
 import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { useSelector, useDispatch } from 'react-redux'
 import { ToastContainer, toast } from 'react-toastify';
+
 const UserList = () => {
   const [userList,setUserList] = useState()
   const db = getDatabase();
   const data = useSelector((state) => state.loginuserdata.value)
-  console.log(data);
-useEffect(()=>{
-  const userRef = ref(db, 'users');
-  onValue(userRef, (snapshot) => {
-  let arr = []
-  snapshot.forEach((item)=>{
-    if(data.uid != item.key){
-      arr.push({...item.val(),id:item.key});
+  const [fRequest,setfRequst] = useState()
 
-    }
- })
- setUserList(arr)
-});
+  console.log(data.uid);
+  
+  useEffect(()=>{
+    const userRef = ref(db, 'users');
+    onValue(userRef, (snapshot) => {
+    let arr = []
+    snapshot.forEach((item)=>{
+      if(data.uid != item.key){
+        arr.push({...item.val(),id:item.key});
 
-},[])
+      }
+  })
+  setUserList(arr)
+  });
+
+  },[])
 let handleFRequest = (frequestinfo) => {
 set(push(ref(db,"friendrequest")),{
   senderid: data.uid,
@@ -47,7 +51,22 @@ set(push(ref(db,"friendrequest")),{
     });
 })
 }
+useEffect(()=>{
+  const fRequestRef = ref(db, 'friendrequest');
+  onValue(fRequestRef, (snapshot) => {
+  let arr = []
+  snapshot.forEach((item)=>{
+    if(data.uid == item.val().senderid){
+       arr.push((item.val().senderid + item.val().receiverid));
 
+     }
+ })
+ setfRequst(arr)
+});
+
+
+},[])
+console.log(fRequest);
   return (
    <>
    <ToastContainer
@@ -79,9 +98,15 @@ set(push(ref(db,"friendrequest")),{
               <h3>{item.username}</h3>
               <p>MERN developer</p>
             </div>
+            {fRequest.includes(item.id + data.uid) || fRequest.includes(data.uid + item.id )
+            ?
+            <button className='addbutton'>cancle</button>
+            :
+            
             <button onClick={()=>handleFRequest(item)} className='addbutton'>
               <FaPlus />
             </button>
+            }
           </div>
         </div>
         )
