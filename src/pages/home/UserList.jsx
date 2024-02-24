@@ -10,7 +10,7 @@ const UserList = () => {
   const [userList,setUserList] = useState()
   const db = getDatabase();
   const data = useSelector((state) => state.loginuserdata.value)
-  const [fRequest,setfRequst] = useState()
+  const [fRequest,setfRequst] = useState([])
 
   console.log(data.uid);
   
@@ -67,6 +67,9 @@ useEffect(()=>{
 
 },[])
 console.log(fRequest);
+let handleCancle = (i)=>{
+  console.log(i.id);
+}
   return (
    <>
    <ToastContainer
@@ -87,7 +90,7 @@ console.log(fRequest);
         <div className='usermainbox'>
         {userList && userList.length > 0
         ?
-        userList.map((item,index)=>
+        userList.map((item,index)=>(
           
         <div key={index} className='useritem'>
           <div className="userimgbox">
@@ -98,18 +101,18 @@ console.log(fRequest);
               <h3>{item.username}</h3>
               <p>MERN developer</p>
             </div>
-            {fRequest.includes(item.id + data.uid) || fRequest.includes(data.uid + item.id )
+            {fRequest && fRequest.includes(item.id + data.uid) || fRequest.includes(data.uid + item.id )
             ?
-            <button className='addbutton'>cancle</button>
+            <button onClick={()=>handleCancle(item)} className='addbutton'>cancle</button>
             :
             
             <button onClick={()=>handleFRequest(item)} className='addbutton'>
               <FaPlus />
             </button>
-            }
+            } 
           </div>
         </div>
-        )
+        ))
         :
         <h2>No user available</h2>
         }

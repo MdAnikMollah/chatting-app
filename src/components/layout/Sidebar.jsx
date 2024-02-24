@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MdOutlineHome } from "react-icons/md";
 import { Link, NavLink } from 'react-router-dom';
 import { AiOutlineMessage } from "react-icons/ai";
@@ -37,7 +37,39 @@ const Sidebar = () => {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-    
+
+//     const defaultSrc =
+//   "https://raw.githubusercontent.com/roadmanfong/react-cropper/master/example/img/child.jpg";
+
+
+    const [image, setImage] = useState();
+    const [cropData, setCropData] = useState("#");
+   
+
+    const onChange = (e) => {
+        e.preventDefault();
+        let files;
+        if (e.dataTransfer) {
+          files = e.dataTransfer.files;
+        } else if (e.target) {
+          files = e.target.files;
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+          setImage(reader.result);
+        };
+        reader.readAsDataURL(files[0]);
+      };
+      const getCropData = () => {
+        if (typeof cropperRef.current?.cropper !== "undefined") {
+          setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL());
+        }
+      };
+
+      let handleImage = (e)=>{
+        console.log(e);
+      }
+
     useEffect(()=>{
         if(!data){
             navigate("/")
@@ -68,7 +100,7 @@ const Sidebar = () => {
     })    
     }
     const userinfo = auth.currentUser;
-    //console.log(userinfo.displayName);
+    
     
   return (
    <>
@@ -84,7 +116,7 @@ const Sidebar = () => {
 
           <Image src={data && data.photoURL} alt="img"/>
           </div>
-          <input type="file"/>
+          <input type="file" onChange={handleImage}/>
         </Box>
       </Modal>
 
