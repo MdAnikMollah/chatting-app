@@ -39,37 +39,37 @@ let handleacceptFrequest = (acceptinfo)=>{
 
   }).then(()=>{
     remove(ref(db,"friendrequest/" + acceptinfo.id))
-    toast.success('Friend request accepted successfully.....', {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      });
+    // toast.success('Friend request accepted successfully.....', {
+    //   position: "top-right",
+    //   autoClose: 2000,
+    //   hideProgressBar: false,
+    //   closeOnClick: true,
+    //   pauseOnHover: true,
+    //   draggable: true,
+    //   progress: undefined,
+    //   theme: "light",
+    //   });
   })
 }
 let handlecancleFrequest = (cancleinfo)=>{
   console.log(cancleinfo);
   remove(ref(db,"friendrequest/" + cancleinfo.id)).then(()=>{
-    toast.error('cancle done....', {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
+    // toast.error('cancle done....', {
+    //   position: "top-right",
+    //   autoClose: 2000,
+    //   hideProgressBar: false,
+    //   closeOnClick: true,
+    //   pauseOnHover: true,
+    //   draggable: true,
+    //   progress: undefined,
+    //   theme: "light",
       
-      });
+    //   });
   })
 }
   return (
     <>
-    <ToastContainer
+    {/* <ToastContainer
       position="top-right"
       autoClose={2000}
       hideProgressBar={false}
@@ -81,7 +81,7 @@ let handlecancleFrequest = (cancleinfo)=>{
       pauseOnHover
       theme="light"
 
-    />
+    /> */}
     <GroupCard cardtitle="Friend Request"> 
         <div className='usermainbox'>
           {fRequest && fRequest.length > 0 ?

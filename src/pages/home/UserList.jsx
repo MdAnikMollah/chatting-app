@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import GroupCard from '../../components/home/GroupCard'
-import { FaPlus } from 'react-icons/fa'
 import Image from '../../utils/Image';
-import { getDatabase, ref, onValue, set, push } from "firebase/database";
+import { getDatabase, ref, onValue, set, push, remove } from "firebase/database";
 import { useSelector, useDispatch } from 'react-redux'
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -11,6 +10,7 @@ const UserList = () => {
   const db = getDatabase();
   const data = useSelector((state) => state.loginuserdata.value)
   const [fRequest,setfRequst] = useState([])
+  const [friendList,setFriendList] = useState([])
 
   console.log(data.uid);
   
@@ -29,7 +29,7 @@ const UserList = () => {
 
   },[])
 let handleFRequest = (frequestinfo) => {
-set(push(ref(db,"friendrequest")),{
+set(ref(db,"friendrequest/" + frequestinfo.id),{
   senderid: data.uid,
   sendername: data.displayName,
   senderimg: data.photoURL,
@@ -39,16 +39,16 @@ set(push(ref(db,"friendrequest")),{
   receiveremail: frequestinfo.email,
   receiverimg: frequestinfo.profileImg
 }).then(()=>{
-  toast.success('Friend request send successfully.....', {
-    position: "top-right",
-    autoClose: 2000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "light",
-    });
+  // toast.success('Friend request send successfully.....', {
+  //   position: "top-right",
+  //   autoClose: 2000,
+  //   hideProgressBar: false,
+  //   closeOnClick: true,
+  //   pauseOnHover: true,
+  //   draggable: true,
+  //   progress: undefined,
+  //   theme: "light",
+  //   });
 })
 }
 useEffect(()=>{
@@ -63,16 +63,42 @@ useEffect(()=>{
  })
  setfRequst(arr)
 });
-
-
 },[])
+
+useEffect(()=>{
+  const friendsRef = ref(db, 'friends');
+  onValue(friendsRef, (snapshot) => {
+  let arr = []
+  snapshot.forEach((item)=>{
+    if(item.val().whoreceiveid == data.uid || item.val().whosendid == data.uid){
+      arr.push(item.val().whoreceiveid + item.val().whosendid)
+    }
+ })
+ setFriendList(arr)
+});
+},[])
+//console.log(setFriendList);
+
 console.log(fRequest);
 let handleCancle = (i)=>{
   console.log(i.id);
+  remove(ref(db,"friendrequest/" + i.id)).then(()=>{
+    // toast.error('cancle done....', {
+    //   position: "top-right",
+    //   autoClose: 2000,
+    //   hideProgressBar: false,
+    //   closeOnClick: true,
+    //   pauseOnHover: true,
+    //   draggable: true,
+    //   progress: undefined,
+    //   theme: "light",
+      
+    //   });
+  })
 }
   return (
    <>
-   <ToastContainer
+   {/* <ToastContainer
       position="top-right"
       autoClose={2000}
       hideProgressBar={false}
@@ -85,7 +111,7 @@ let handleCancle = (i)=>{
       theme="light"
   />
 
-  <ToastContainer />
+  <ToastContainer /> */}
    <GroupCard cardtitle="User List"> 
         <div className='usermainbox'>
         {userList && userList.length > 0
@@ -101,13 +127,21 @@ let handleCancle = (i)=>{
               <h3>{item.username}</h3>
               <p>MERN developer</p>
             </div>
-            {fRequest && fRequest.includes(item.id + data.uid) || fRequest.includes(data.uid + item.id )
+            {
+              fRequest.length > 0 && fRequest.includes(item.id + data.uid) || fRequest.includes(data.uid + item.id )
             ?
+            <>
+            <button className='addbutton'>pending</button>
             <button onClick={()=>handleCancle(item)} className='addbutton'>cancle</button>
-            :
             
+            </>
+            :
+            friendList.includes(item.id + data.uid) || friendList.includes(data.uid + item.id)
+            ?
+            <button className='addbutton'>friend</button>
+            :
             <button onClick={()=>handleFRequest(item)} className='addbutton'>
-              <FaPlus />
+              add
             </button>
             } 
           </div>

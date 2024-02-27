@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import GroupCard from '../../components/home/GroupCard'
 import Image from '../../utils/Image'
 import { FaPlus } from 'react-icons/fa'
-import { getDatabase, ref, onValue, set, push } from "firebase/database";
+import { getDatabase, ref, onValue, set, push, remove } from "firebase/database";
 import { useSelector, useDispatch } from 'react-redux'
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -25,6 +25,23 @@ const Friends = () => {
   });
 
   },[])
+
+let handleBlock = (blockinfo) => {
+console.log(blockinfo);
+set(push(ref(db,'block')),{
+  whoblockid: data.uid,
+  whoblockname: data.displayName,
+  whoblockemail: data.email,
+  whoblockimg: data.photoURL,
+  blockid: blockinfo.whorecieveid,
+  blockemail: blockinfo.whorecieveemail,
+  blockname: blockinfo.whorecievename,
+  blockimg: blockinfo.whorecievephoto,
+}).then(()=>{
+  remove(ref(db, "friends/"+blockinfo.id))
+})
+}
+
   return (
     <>
     <GroupCard cardtitle="Friends"> 
@@ -44,7 +61,7 @@ const Friends = () => {
                 }
                 <p>MERN developer</p>
               </div>
-              <button className='addbutton'>
+              <button  onClick={()=>handleBlock(item)} className='addbutton'>
                 Block
               </button>
             </div>
