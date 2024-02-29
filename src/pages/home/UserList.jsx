@@ -12,7 +12,7 @@ const UserList = () => {
   const [fRequest,setfRequst] = useState([])
   const [friendList,setFriendList] = useState([])
 
-  console.log(data.uid);
+  //console.log(data.uid);
   
   useEffect(()=>{
     const userRef = ref(db, 'users');
@@ -70,8 +70,8 @@ useEffect(()=>{
   onValue(friendsRef, (snapshot) => {
   let arr = []
   snapshot.forEach((item)=>{
-    if(item.val().whoreceiveid == data.uid || item.val().whosendid == data.uid){
-      arr.push(item.val().whoreceiveid + item.val().whosendid)
+    if(item.val().whorecieveid == data.uid || item.val().whosendid == data.uid){
+      arr.push(item.val().whorecieveid + item.val().whosendid)
     }
  })
  setFriendList(arr)
@@ -79,9 +79,9 @@ useEffect(()=>{
 },[])
 //console.log(setFriendList);
 
-console.log(fRequest);
+//console.log(fRequest);
 let handleCancle = (i)=>{
-  console.log(i.id);
+  //console.log(i.id);
   remove(ref(db,"friendrequest/" + i.id)).then(()=>{
     // toast.error('cancle done....', {
     //   position: "top-right",
