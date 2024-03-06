@@ -11,6 +11,7 @@ const UserList = () => {
   const data = useSelector((state) => state.loginuserdata.value)
   const [fRequest,setfRequst] = useState([])
   const [friendList,setFriendList] = useState([])
+  const [requestcheak,setRequestCheak] = useState([])
 
   //console.log(data.uid);
   
@@ -55,13 +56,19 @@ useEffect(()=>{
   const fRequestRef = ref(db, 'friendrequest');
   onValue(fRequestRef, (snapshot) => {
   let arr = []
+  let xyz = []
   snapshot.forEach((item)=>{
+    if(item.val().receiverid == data.uid){
+      xyz.push(item.val().senderid + item.val().receiverid)
+
+    }
     if(data.uid == item.val().senderid){
        arr.push((item.val().senderid + item.val().receiverid));
 
      }
  })
  setfRequst(arr)
+ setRequestCheak(xyz)
 });
 },[])
 
@@ -80,6 +87,7 @@ useEffect(()=>{
 //console.log(setFriendList);
 
 //console.log(fRequest);
+console.log(setRequestCheak);
 let handleCancle = (i)=>{
   //console.log(i.id);
   remove(ref(db,"friendrequest/" + i.id)).then(()=>{
@@ -124,11 +132,11 @@ let handleCancle = (i)=>{
           </div>
           <div className='userinfobox'>
             <div>
-              <h3>{item.username}</h3>
+              <h3>{item.username}</h3> 
               <p>MERN developer</p>
             </div>
             {
-              fRequest.length > 0 && fRequest.includes(item.id + data.uid) || fRequest.includes(data.uid + item.id )
+              fRequest.length > 0 && fRequest.includes(item.id + data.uid) || fRequest.includes(data.uid + item.id)
             ?
             <>
             <button className='addbutton'>pending</button>
@@ -140,9 +148,14 @@ let handleCancle = (i)=>{
             ?
             <button className='addbutton'>friend</button>
             :
+            requestcheak.includes(item.id + data.uid)
+            ?
+            <button className='addbutton'>confirm</button>
+             
+            :
             <button onClick={()=>handleFRequest(item)} className='addbutton'>
-              add
-            </button>
+               add
+             </button>
             } 
           </div>
         </div>
