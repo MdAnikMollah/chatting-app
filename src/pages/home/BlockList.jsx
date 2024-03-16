@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import GroupCard from '../../components/home/GroupCard'
 import Image from '../../utils/Image'
 import { useSelector } from 'react-redux'
-import { getDatabase, ref, onValue, set, push } from "firebase/database";
+import { getDatabase, ref, onValue, set, push, remove } from "firebase/database";
 
 const BlockList = () => {
   const [blockList,setBlockList] = useState()
@@ -23,6 +23,15 @@ const BlockList = () => {
   });
 
   },[])
+
+  let handleUnblock = (unblockinfo) => {
+    console.log(unblockinfo);
+    
+      remove(ref(db, "block/" + unblockinfo.id))
+    }
+  
+    
+  
   return (
     <>
     <GroupCard cardtitle="Block List"> 
@@ -37,7 +46,7 @@ const BlockList = () => {
                 <h3>{item.blockname}</h3>
                 <p>MERN developer</p>
               </div>
-              <button className='addbutton'>
+              <button  onClick={()=>handleUnblock(item)} className='addbutton'>
                 Unblock
               </button>
             </div>
@@ -51,6 +60,7 @@ const BlockList = () => {
   </GroupCard> 
     </>
   )
-}
+  }
+
 
 export default BlockList
