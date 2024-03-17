@@ -23,6 +23,10 @@ const Message = () => {
   });
 
   },[])
+
+  let handleUser = (i) =>{
+    console.log(i);
+  }
   return (
     <div className='message_wrapper'>
       <div className="message_user_body">
@@ -33,7 +37,7 @@ const Message = () => {
           //<div key={index} className="message_user_item">
 
           //</div>
-          <div key={index} className='message_user_item'>
+          <div onClick={()=>handleUser(item)} key={index} className='message_user_item'>
             <div className="userimgbox">
               <Image src={data.uid == item.whosendid ? item.whorecievephoto : item.whosendphoto} alt="img"/>
             </div>
@@ -59,7 +63,27 @@ const Message = () => {
         </div>
       </div>
       <div className="message_box_body">
-        
+        <div className="message_box_heading">
+          <h3>Jannat</h3>
+          <p>Active Now</p> 
+        </div>
+        <div className="message_main">
+          <div className="send_message">
+             <p>hello</p>
+          </div>
+          <div className="recieve_message">
+             <p>hello</p>
+          </div>
+          <div className="send_message">
+             <p>I Love You</p>
+          </div>
+          <div className="recieve_message">
+             <p>I Love You Too</p>
+          </div>
+        </div>
+        <div className="message_footer">
+          <input placeholder='Please Enter Your Message' />
+        </div>
       </div>
     </div>
   )
