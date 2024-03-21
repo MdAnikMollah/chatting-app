@@ -27,7 +27,6 @@ const Friends = () => {
   },[])
 
 let handleBlock = (blockinfo) => {
-console.log(blockinfo);
 set(push(ref(db,'block')),{
   whoblockid: data.uid,
   whoblockname: data.displayName,

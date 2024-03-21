@@ -3,11 +3,18 @@ import { getDatabase, ref, onValue, set, push, remove } from "firebase/database"
 import "./message.css"
 import { useSelector, useDispatch } from 'react-redux'
 import Image from '../../utils/Image';
+import { activeuser } from '../../slices/activeUserSlice';
+
 const Message = () => {
 
+  const [allMessage,setAllMessage] = useState([])
+  const [messageText,setMessageText] = useState("")
   const [friendList,setFriendList] = useState()
   const db = getDatabase();
   const data = useSelector((state) => state.loginuserdata.value)
+  const activechat = useSelector((state) => state?.activeuserdata?.value)
+  const dispatch = useDispatch()
+  // console.log(activechat);
 
   useEffect(()=>{
     const friendRef = ref(db, 'friends');
@@ -25,8 +32,40 @@ const Message = () => {
   },[])
 
   let handleUser = (i) =>{
-    console.log(i);
+   dispatch(activeuser(i)) 
   }
+
+ //message write oparetion
+  let handleSubmit = () => {
+    set(push(ref(db,'message')),{
+      senderid: data.uid,
+      senderemail: data.email,
+      sendername: data.displayName,
+      message: messageText,
+      recieverid: data.uid == activechat.whorecieveid ? activechat.whosendid : activechat.whorecieveid,
+      recievername: data.uid == activechat.whorecieveid ? activechat.whosendname : activechat.whorecievename,
+      recieveremail: data.uid == activechat.whorecieveid ? activechat.whosendemail : activechat.whorecieveemail,
+    }).then(()=>{
+      console.log("msg send hoise");
+    })
+  }
+
+  //message read operation
+  useEffect(()=>{
+    const messageRef = ref(db, 'message');
+    onValue(messageRef, (snapshot) => {
+    let arr = []
+    snapshot.forEach((item)=>{
+      if(data.uid == item.val().recieverid || data.uid == item.val().senderid){
+        arr.push({...item.val(),id:item.key});
+
+      }
+  })
+  setAllMessage(arr)
+  });
+
+  },[activechat])
+
   return (
     <div className='message_wrapper'>
       <div className="message_user_body">
@@ -62,16 +101,32 @@ const Message = () => {
           }
         </div>
       </div>
+      {activechat != null ?
+
       <div className="message_box_body">
         <div className="message_box_heading">
-          <h3>Jannat</h3>
+          <h3>
+           {activechat !== null && activechat.whosendid == data.uid
+            ?
+            activechat.whorecievename
+
+            :
+            activechat.whosendname 
+
+            }  
+          </h3>
           <p>Active Now</p> 
         </div>
         <div className="message_main">
-          <div className="send_message">
-             <p>hello</p>
-          </div>
-          <div className="recieve_message">
+          {allMessage.map((item,index)=>(
+            <div className="send_message">
+              <p>{item.message}</p>
+            </div>
+          ))
+
+          }
+          
+          {/* <div className="recieve_message">
              <p>hello</p>
           </div>
           <div className="send_message">
@@ -79,12 +134,18 @@ const Message = () => {
           </div>
           <div className="recieve_message">
              <p>I Love You Too</p>
-          </div>
+          </div> */}
         </div>
         <div className="message_footer">
-          <input placeholder='Please Enter Your Message' />
+          <input onChange={(e)=>setMessageText(e.target.value)} className='message_input' placeholder='Please Enter Your Message' />
+          <button onClick={handleSubmit} className='message_send_btn'>sent</button>
         </div>
       </div>
+      :
+      <div>
+        <h2>Please select a user</h2>
+      </div>
+      }
     </div>
   )
 }
