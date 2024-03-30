@@ -95,6 +95,10 @@
     width: 100%;
     height: 80px;
     padding: 10px 20px;
+    position: relative;
+    display: flex;
+    /* align-items: center;  */
+    /* justify-content: space-between */
 }
 .message_input{
     width: 60%;
@@ -113,5 +117,15 @@
     cursor: pointer;
     color: #000;
     font-size: 20px;
-    margin-left: 20px;
+    margin-left: 10px;
+}
+.emoji_wrapper{
+    position: absolute;
+    left: 20px;
+    bottom: 90px;
+    background-color: red;
+}
+.scrollbox{
+    height: 600px;
+    overflow-y: scroll;
 }

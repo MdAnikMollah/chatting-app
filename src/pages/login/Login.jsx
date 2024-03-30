@@ -15,7 +15,7 @@ import Image from '../../utils/Image';
 import { TextField, IconButton, InputAdornment } from '@mui/material';
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
-import { getAuth, signInWithEmailAndPassword, signOut  } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, signOut  } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux'
@@ -52,6 +52,28 @@ const Login = () => {
   const auth = getAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch()
+  const provider = new GoogleAuthProvider();
+  let handleGoogleAuth = () => {
+    signInWithPopup(auth, provider)
+    .then((result) => {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      // The signed-in user info.
+      const user = result.user;
+      // IdP data available using getAdditionalUserInfo(result)
+      // ...
+    }).catch((error) => {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // The email of the user's account used.
+      const email = error.customData.email;
+      // The AuthCredential type that was used.
+      const credential = GoogleAuthProvider.credentialFromError(error);
+      // ...
+    });
+  }
   //let emailregex = (/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -150,7 +172,7 @@ const Login = () => {
   }
   
   let handleForgetSubmit = () => {
-    console.log(forgetformData);
+    
     if(!forgetformData.forgetemail){
       setforgetError({forgetemail: "email nai"});
     }
@@ -159,6 +181,15 @@ const Login = () => {
     }else{
       setforgetError({forgetemail: ""})
       console.log(forgetformData);
+      sendPasswordResetEmail(auth, forgetformData.forgetemail)
+        .then(() => {
+          console.log("forget email send successfully");
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          
+        });
     }
   }
 
@@ -206,7 +237,7 @@ const Login = () => {
           <div className="loginbox">
            <div className='loginbox_inner'>
              <SectionHeading style="auth_heading" text="Login to your account"/>
-             <div className="provider_login">
+             <div onClick={handleGoogleAuth} className="provider_login">
                 <img src={GoogleSvg}/>
                 <span>Login with Google</span>
              </div>
