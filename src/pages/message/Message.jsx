@@ -36,9 +36,7 @@ const Message = () => {
   };
 
   let handleSubmit = () => {
-    set(
-      push(ref(db, 'message')),
-      {
+    set(push(ref(db, 'message')),{
         senderid: data.uid,
         senderemail: data.email,
         sendername: data.displayName,
@@ -46,9 +44,10 @@ const Message = () => {
         recieverid: data.uid === activechat.whorecieveid ? activechat.whosendid : activechat.whorecieveid,
         recievername: data.uid === activechat.whorecieveid ? activechat.whosendname : activechat.whorecievename,
         recieveremail: data.uid === activechat.whorecieveid ? activechat.whosendemail : activechat.whorecieveemail,
-      },
-      () => setMessageText('') // Clear message text after sending
-    );
+      }).then(()=>{
+        setMessageText('') 
+      })  
+    ;
   };
 
   useEffect(() => {
