@@ -1,7 +1,7 @@
 .sidebar_box{
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     background-color: #5F35F5;
     align-items: center;
     padding: 50px 0;
@@ -67,7 +67,7 @@
     
 }
 .logout{
-    padding: 15px 30px;
+    padding: 15px 50px;
     background-color: #fff;
     color: #5F35F5;
     font-size: 18px;
@@ -84,13 +84,13 @@
 }
 .navigation li a{
     color: #fff;
-    padding: 12px 55px;
+    padding: 15px 65px;
     display: inline-block;
     border-radius: 20px;
     gap: 20px;
 }
 .navigation li a svg{
-    font-size: 25px;
+    font-size: 50px;
 }
 .navigation li a.active{
     background-color: #fff;
@@ -105,3 +105,7 @@
     
 }
 
+.img-preview{
+    width: 100% !important;
+    height: 100% !important;
+}

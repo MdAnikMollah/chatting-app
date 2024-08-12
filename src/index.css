@@ -104,3 +104,6 @@ ul,ol{
     gap: 30px;
     flex-wrap: wrap;
 }
+.useremail{
+    color: #fff;
+}
