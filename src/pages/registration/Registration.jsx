@@ -4,7 +4,7 @@ import Inputes from '../../components/Inputes'
 import CustomeButton from '../../components/CustomeButton'
 import AuthNavigate from '../../components/AuthNavigate'
 import React, { useState } from 'react';
-import Image from '../../utils/image';
+import Image from '../../utils/Image.jsx';
 import RegImg from '../../assets/images/sea.jpg';
 import { TextField, IconButton, InputAdornment } from '@mui/material';
 import { IoMdEye } from "react-icons/io";
